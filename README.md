@@ -95,6 +95,7 @@ jane@email.com (Customer)
 
 ---
 ---
+## With love André
 ## License
 
 The MIT License
