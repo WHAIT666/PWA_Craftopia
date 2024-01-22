@@ -28,7 +28,7 @@ const errorHandler = (err, req, res, next) => {
   // Responder com o status e mensagem de erro
   res.status(statusCode).json({
     message: message,
-    // Se estiver em ambiente de produção, não incluir a pilha de erro completa na resposta
+    // Se estiver em ambiente de produção, não incluir a error pile
     stack: process.env.NODE_ENV === 'production' ? null : err.stack,
   });
 };

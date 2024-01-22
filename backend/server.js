@@ -6,7 +6,7 @@ import cookieParser from 'cookie-parser';
 // Carrega as variáveis de ambiente do arquivo .env
 dotenv.config();
 
-// Importa a função de conexão com o banco de dados
+// Importa a função de conexão com a base de dados
 import connectDB from './config/db.js';
 
 // Importa as rotas dos diferentes recursos
@@ -21,17 +21,17 @@ import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 // Define a porta do servidor, utilizando a variável de ambiente ou 5000 como padrão
 const port = process.env.PORT || 5000;
 
-// Conecta ao banco de dados MongoDB
+// Coneecta a base de dados MongoDB
 connectDB();
 
 // Cria uma instância do aplicativo Express
 const app = express();
 
-// Configura o aplicativo para usar JSON e processar dados codificados na URL
+// Configura a aplicação para usar JSON e processar dados codificados na URL
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Configura o aplicativo para usar o cookie parser
+// Cofigura a aplicação para utilizar o cookie parser
 app.use(cookieParser());
 
 // Configura as rotas para cada recurso específico
@@ -45,16 +45,16 @@ app.get('/api/config/paypal', (req, res) =>
   res.send({ clientId: process.env.PAYPAL_CLIENT_ID })
 );
 
-// Define o caminho para os arquivos enviados (uploads) como um diretório estático
+// Define o caminho para os arquivos enviados (uploads) como um dstatic directory
 const __dirname = path.resolve();
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
 
 // Configuração específica para o ambiente de produção
 if (process.env.NODE_ENV === 'production') {
-  // Configura o aplicativo para servir arquivos estáticos do diretório 'frontend/build'
+  // Configura a aplicação para servir arquivos estáticos do diretório 'frontend/build'
   app.use(express.static(path.join(__dirname, '/frontend/build')));
 
-  // Qualquer rota que não seja '/api' será redirecionada para o arquivo 'index.html' no diretório 'frontend/build'
+  // Qualquer rota que não seja '/api' é redirecionada para o 'index.html' 
   app.get('*', (req, res) =>
     res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html'))
   );

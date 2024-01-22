@@ -33,7 +33,7 @@ const importData = async () => {
       return { ...product, user: adminUser };
     });
 
-    // Insere produtos de exemplo no banco de dados
+    // Insere produtos de exemplo na base de dados
     await Product.insertMany(sampleProducts);
 
     // Exibe mensagem de sucesso no console
@@ -48,10 +48,10 @@ const importData = async () => {
   }
 };
 
-// Função para remover todos os dados do banco de dados
+// Função para remover todos os dados da base de dados
 const destroyData = async () => {
   try {
-    // Remove todos os documentos nas coleções de Order, Product e User
+    // Remove todos os documentos nas Collections de Order, Product e User
     await Order.deleteMany();
     await Product.deleteMany();
     await User.deleteMany();
@@ -70,7 +70,7 @@ const destroyData = async () => {
 
 // Verifica se o argumento de linha de comando é '-d' (destroyData)
 if (process.argv[2] === '-d') {
-  // Executa a função para remover dados do banco de dados
+  // Executa a função para remover dados da base de dados
   destroyData();
 } else {
   // Se nenhum argumento '-d' for fornecido, executa a função para importar dados

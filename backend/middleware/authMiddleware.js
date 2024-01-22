@@ -38,7 +38,7 @@ const admin = (req, res, next) => {
     // Continuar para a próxima camada de middleware
     next();
   } else {
-    // Se o usuário não for um administrador, responder com status 401 e mensagem de erro
+    // Se o utilizador não for um administrador, responder com status 401 e mensagem de erro
     res.status(401);
     throw new Error('Não autorizado como administrador');
   }

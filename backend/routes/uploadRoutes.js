@@ -51,5 +51,5 @@ router.post('/', upload.single('image'), (req, res) => {
   });
 });
 
-// Exporta o roteador que lida com o upload de imagens
+// Exporta do router que lida com o upload de imagens
 export default router;

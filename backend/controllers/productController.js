@@ -5,7 +5,7 @@ import Product from '../models/productModel.js';
 // @route   GET /api/products
 // @access  Público
 const getProducts = asyncHandler(async (req, res) => {
-  // Configuração da paginação e pesquisa por palavra-chave
+  // Configuração da paginação e pesquisa por keyword
   const pageSize = 8;
   const page = Number(req.query.pageNumber) || 1;
   const keyword = req.query.keyword
@@ -43,7 +43,7 @@ const getProductById = asyncHandler(async (req, res) => {
 // @route   POST /api/products
 // @access  Privado/Admin
 const createProduct = asyncHandler(async (req, res) => {
-  // Criar um novo produto com valores padrão
+  // Criar um novo produto com valorees base
   const product = new Product({
     name: 'Nome de exemplo',
     price: 0,
@@ -55,7 +55,7 @@ const createProduct = asyncHandler(async (req, res) => {
     numReviews: 0,
     description: 'Descrição de exemplo',
   });
-  // Salvar o novo produto no banco de dados
+  // Guardar o produto novo na base de dados
   const createdProduct = await product.save();
   res.status(201).json(createdProduct);
 });
@@ -64,7 +64,7 @@ const createProduct = asyncHandler(async (req, res) => {
 // @route   PUT /api/products/:id
 // @access  Privado/Admin
 const updateProduct = asyncHandler(async (req, res) => {
-  // Extrair informações do corpo da requisição
+  // Extrair informações do body
   const { name, price, description, image, brand, category, countInStock } =
     req.body;
   // Buscar o produto por ID
@@ -79,7 +79,7 @@ const updateProduct = asyncHandler(async (req, res) => {
     product.brand = brand;
     product.category = category;
     product.countInStock = countInStock;
-    // Salvar o produto atualizado no banco de dados
+    // Guardar o produto atualizado na base de dados
     const updatedProduct = await product.save();
     res.json(updatedProduct);
   } else {
@@ -96,7 +96,7 @@ const deleteProduct = asyncHandler(async (req, res) => {
   const product = await Product.findById(req.params.id);
   // Verificar se o produto foi encontrado
   if (product) {
-    // Excluir o produto do banco de dados
+    // Apagar o produto da base de dados
     await Product.deleteOne({ _id: product._id });
     res.json({ message: 'Produto removido' });
   } else {
@@ -109,13 +109,13 @@ const deleteProduct = asyncHandler(async (req, res) => {
 // @route   POST /api/products/:id/reviews
 // @access  Privado
 const createProductReview = asyncHandler(async (req, res) => {
-  // Extrair informações da avaliação do corpo da requisição
+  // Extrair informações da avaliação do bofy
   const { rating, comment } = req.body;
   // Buscar o produto por ID
   const product = await Product.findById(req.params.id);
   // Verificar se o produto foi encontrado
   if (product) {
-    // Verificar se o usuário já avaliou o produto
+    // Verificar se o utilizador já avaliou o produto
     const alreadyReviewed = product.reviews.find(
       (r) => r.user.toString() === req.user._id.toString()
     );
@@ -136,7 +136,7 @@ const createProductReview = asyncHandler(async (req, res) => {
     product.rating =
       product.reviews.reduce((acc, item) => item.rating + acc, 0) /
       product.reviews.length;
-    // Salvar o produto atualizado no banco de dados
+    // Guardar o produto atualizado na base de dados
     await product.save();
     res.status(201).json({ message: 'Avaliação adicionada' });
   } else {

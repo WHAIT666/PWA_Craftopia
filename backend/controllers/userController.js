@@ -2,22 +2,22 @@ import asyncHandler from '../middleware/asyncHandler.js';
 import generateToken from '../utils/generateToken.js';
 import User from '../models/userModel.js';
 
-// @desc    Autenticar usuário e obter token
+// @desc    Autenticar utilizador e obter token
 // @route   POST /api/users/auth
 // @access  Público
 const authUser = asyncHandler(async (req, res) => {
-  // Extrair email e senha do corpo da requisição
+  // Extrair email e senha do body
   const { email, password } = req.body;
 
-  // Buscar usuário pelo email
+  // Buscar utilizador pelo email
   const user = await User.findOne({ email });
 
-  // Verificar se o usuário existe e a senha está correta
+  // Verificar se o utilizador existe e a senha está correta
   if (user && (await user.matchPassword(password))) {
     // Gerar e enviar token de autenticação
     generateToken(res, user._id);
 
-    // Responder com informações do usuário (sem a senha)
+    // Responder com informações do utilizadr (sem a spasswrod)
     res.json({
       _id: user._id,
       name: user.name,
@@ -30,34 +30,34 @@ const authUser = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc    Registrar um novo usuário
+// @desc    Registrar um novo utilizador
 // @route   POST /api/users
 // @access  Público
 const registerUser = asyncHandler(async (req, res) => {
-  // Extrair nome, email e senha do corpo da requisição
+  // Extrair nome, email e password do body request
   const { name, email, password } = req.body;
 
-  // Verificar se já existe um usuário com o mesmo email
+  // Verificar se já existe um utilizador com o mesmo email
   const userExists = await User.findOne({ email });
 
-  // Se o usuário já existe, retornar erro
+  // Se o utilizadro já existe, retornar erro
   if (userExists) {
     res.status(400);
     throw new Error('Usuário já cadastrado');
   }
 
-  // Criar um novo usuário
+  // Criar um novo utilizador
   const user = await User.create({
     name,
     email,
     password,
   });
 
-  // Se o usuário for criado com sucesso, gerar e enviar token de autenticação
+  // Se o utilizador for criado com sucesso, gerar e enviar token de autenticação
   if (user) {
     generateToken(res, user._id);
 
-    // Responder com informações do usuário (sem a senha)
+    // Responder com informações do utilizador (sem a senha)
     res.status(201).json({
       _id: user._id,
       name: user.name,
@@ -70,7 +70,7 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc    Logout do usuário / limpar cookie
+// @desc    Logout do utilizador / limpar cookie
 // @route   POST /api/users/logout
 // @access  Público
 const logoutUser = (req, res) => {
@@ -79,14 +79,14 @@ const logoutUser = (req, res) => {
   res.status(200).json({ message: 'Logout realizado com sucesso' });
 };
 
-// @desc    Obter perfil do usuário
+// @desc    Obter perfil do utilizador
 // @route   GET /api/users/profile
 // @access  Privado
 const getUserProfile = asyncHandler(async (req, res) => {
   // Buscar usuário pelo ID
   const user = await User.findById(req.user._id);
 
-  // Se o usuário for encontrado, responder com suas informações (sem a senha)
+  // Se o utilizador for encontrado, responder com suas informações (sem a senha)
   if (user) {
     res.json({
       _id: user._id,
@@ -100,27 +100,27 @@ const getUserProfile = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc    Atualizar perfil do usuário
+// @desc    Atualizar perfil do uutilizador
 // @route   PUT /api/users/profile
 // @access  Privado
 const updateUserProfile = asyncHandler(async (req, res) => {
   // Buscar usuário pelo ID
   const user = await User.findById(req.user._id);
 
-  // Se o usuário for encontrado, atualizar suas informações
+  // Se o utilizador for encontrado, atualizar suas informações
   if (user) {
     user.name = req.body.name || user.name;
     user.email = req.body.email || user.email;
 
-    // Se uma nova senha foi fornecida, atualizar a senha
+    // Se uma nova password foi fornecida, atualizar a senha
     if (req.body.password) {
       user.password = req.body.password;
     }
 
-    // Salvar o usuário atualizado no banco de dados
+    // Guardar o utilizador atualizado na base dedaods
     const updatedUser = await user.save();
 
-    // Responder com as informações atualizadas do usuário (sem a senha)
+    // Responder com as informações atualizadas do utilizador (sem a senha)
     res.json({
       _id: updatedUser._id,
       name: updatedUser.name,
@@ -133,35 +133,35 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc    Obter todos os usuários
+// @desc    Obter todos os utiliadors
 // @route   GET /api/users
 // @access  Privado/Admin
 const getUsers = asyncHandler(async (req, res) => {
-  // Buscar todos os usuários no banco de dados
+  // procurar todos os utilizadores na base de dados
   const users = await User.find({});
   res.json(users);
 });
 
-// @desc    Excluir usuário
+// @desc    Excluir utilizador
 // @route   DELETE /api/users/:id
 // @access  Privado/Admin
 const deleteUser = asyncHandler(async (req, res) => {
-  // Buscar usuário pelo ID
+  // Buscar utilizador pelo ID
   const user = await User.findById(req.params.id);
 
-  // Se o usuário for encontrado
+  // Se o utilizador for encontrado
   if (user) {
-    // Impedir a exclusão de um usuário administrador
+    // Impedir a exclusão de um utilizador admin
     if (user.isAdmin) {
       res.status(400);
-      throw new Error('Não é possível excluir um usuário administrador');
+      throw new Error('Não é possível excluir um utilizador administrador');
     }
     // Excluir o usuário do banco de dados
     await User.deleteOne({ _id: user._id });
-    res.json({ message: 'Usuário removido' });
+    res.json({ message: 'Utilizador removido' });
   } else {
     res.status(404);
-    throw new Error('Usuário não encontrado');
+    throw new Error('Utilizador não encontrado');
   }
 });
 

@@ -27,7 +27,7 @@ const ProfileScreen = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      toast.error('Passwords do not match');
+      toast.error('As passwords não coincidem');
     } else {
       try {
         const res = await updateProfile({
@@ -37,7 +37,7 @@ const ProfileScreen = () => {
           password,
         }).unwrap();
         dispatch(setCredentials({ ...res }));
-        toast.success('Profile updated successfully');
+        toast.success('Perfil atualizado com sucesso');
       } catch (err) {
         toast.error(err?.data?.message || err.error);
       }
@@ -52,7 +52,7 @@ const ProfileScreen = () => {
             <Form.Label>Nome</Form.Label>
             <Form.Control
               type='name'
-              placeholder='Enter name'
+              placeholder='Inserir o Nome'
               value={name}
               onChange={(e) => setName(e.target.value)}
             ></Form.Control>

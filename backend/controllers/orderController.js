@@ -5,7 +5,7 @@ import Order from '../models/orderModel.js';
 // @route   POST /api/orders
 // @access  Privado
 const addOrderItems = asyncHandler(async (req, res) => {
-  // Extrair informações do corpo da requisição
+  // Extrair informações do body
   const {
     orderItems,
     shippingAddress,
@@ -37,17 +37,17 @@ const addOrderItems = asyncHandler(async (req, res) => {
       totalPrice,
     });
 
-    // Salvar o pedido no banco de dados
+    // Guardar o pedido na base de dados
     const createdOrder = await order.save();
     res.status(201).json(createdOrder);
   }
 });
 
-// @desc    Obter pedidos do usuário logado
+// @desc    Obter pedidos do utilizador logado
 // @route   GET /api/orders/myorders
 // @access  Privado
 const getMyOrders = asyncHandler(async (req, res) => {
-  // Buscar pedidos associados ao ID do usuário logado
+  // Buscar pedidos associados ao ID do utilizador logado
   const orders = await Order.find({ user: req.user._id });
   res.json(orders);
 });
@@ -56,7 +56,7 @@ const getMyOrders = asyncHandler(async (req, res) => {
 // @route   GET /api/orders/:id
 // @access  Privado
 const getOrderById = asyncHandler(async (req, res) => {
-  // Buscar pedido por ID e incluir informações do usuário relacionado
+  // Buscar pedido por ID e incluir informações do utilizador relacionado
   const order = await Order.findById(req.params.id).populate(
     'user',
     'name email'
@@ -90,7 +90,7 @@ const updateOrderToPaid = asyncHandler(async (req, res) => {
       email_address: req.body.payer.email_address,
     };
 
-    // Salvar o pedido atualizado no banco de dados
+    // Guardar o pedido atualizado na base de dado
     const updatedOrder = await order.save();
     res.json(updatedOrder);
   } else {
@@ -112,7 +112,7 @@ const updateOrderToDelivered = asyncHandler(async (req, res) => {
     order.isDelivered = true;
     order.deliveredAt = Date.now();
 
-    // Salvar o pedido atualizado no banco de dados
+    // Guardar o pedido atualizado na base de dados
     const updatedOrder = await order.save();
 
     res.json(updatedOrder);
@@ -126,12 +126,12 @@ const updateOrderToDelivered = asyncHandler(async (req, res) => {
 // @route   GET /api/orders
 // @access  Privado/Admin
 const getOrders = asyncHandler(async (req, res) => {
-  // Buscar todos os pedidos e incluir informações do usuário relacionado
+  // Buscar todos os pedidos e incluir informações do utilizador relacionado
   const orders = await Order.find({}).populate('user', 'id name');
   res.json(orders);
 });
 
-// Exportar os controladores de pedido
+// Exportar os controllers de pedido
 export {
   addOrderItems,
   getMyOrders,
